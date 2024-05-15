@@ -45,16 +45,26 @@ if (length(places) == 0) {
 }
 
 # Create data frame
+if (length(places) == 0) {
+  stop("No places found by the API.")
+}
+
 places_df <- do.call(rbind, lapply(places, function(x) {
-  if (!is.null(x$geometry$location)) {
+  str(x)
+  class(x)
+  print(x$geometry)
+  if (!is.null(x$geometry) && !is.null(x$geometry$location)) {
     data.frame(
       name = x$name,
       lat = x$geometry$location$lat,
-      lon = x$geometry$location$lng
+      lon = x$geometry$location$lng,
+      stringsAsFactors = FALSE
     )
   }
 })) 
 
+print(x$geometry)
+print(places[1:5])
 # Check whether places_df is NULL before applying distinct
 if (!is.null(places_df)) {
   places_df <- places_df %>% distinct()
@@ -73,4 +83,28 @@ lucerne_map <- get_map(location = c(46.8, 8.3), zoom = 8)
 ggmap(lucerne_map) +
   geom_point(data = places_df, aes(x = lon, y = lat), color = "blue", size = 2, alpha = 0.5) +
   ggtitle("Sightseeing in Lucerne")
+
+
+
+# Überprüfe die API-Antwort
+print(places)  # Drucke den Inhalt von places
+http_status <- 200  # Hier sollte der tatsächliche HTTP-Statuscode eingesetzt werden
+if (http_status != 200) {
+  stop("API request failed with status code ", http_status)
+}
+
+# Überprüfe die Datenstruktur der API-Antwort
+str(places)  # Überprüfe die Struktur von places
+class(places)  # Überprüfe den Typ von places
+
+# Behandlung von Fehlern
+if (!is.list(places)) {
+  stop("API response is not in the expected format")
+}
+
+# Überprüfe, ob places ein Dataframe ist
+if (!is.data.frame(places)) {
+  stop("Die API-Antwort ist nicht im erwarteten Format (Dataframe)")
+}
+
 
