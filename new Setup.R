@@ -1,4 +1,5 @@
 library(httr)
+library(jsonlite)
 
 # API-URL für die Lebenserwartung
 url <- "https://www.pxweb.bfs.admin.ch/api/v1/en/px-x-0102030000_101/px-x-0102030000_101.px"
@@ -7,24 +8,24 @@ url <- "https://www.pxweb.bfs.admin.ch/api/v1/en/px-x-0102030000_101/px-x-010203
 filters <- list(
   query = list(
     list(
-      code = "Geschlecht",
+      code = "Sex",
       selection = list(
         filter = "item",
-        values = c("0") # Total (Geschlecht)
+        values = c("0") # Total Sex
       )
     ),
     list(
-      code = "Alter",
+      code = "Age",
       selection = list(
         filter = "item",
-        values = c("0") # Total (Alter)
+        values = c("0") # Total Age
       )
     ),
     list(
-      code = "Jahr",
+      code = "Year",
       selection = list(
         filter = "item",
-        values = c("2020") # Jahr 2020
+        values = c("2020") # Year 2020
       )
     )
   ),
@@ -33,57 +34,37 @@ filters <- list(
   )
 )
 
-# Vor dem Senden der Anfrage
-print(filters)
+
+# Konvertiere den Anfragekörper in JSON
+filters_json <- toJSON(filters, auto_unbox = TRUE, pretty = TRUE)
+cat(filters_json)
+
+# Konvertiere den Anfragekörper in URL kodierte Zeichenkette
+filgers_url_encoded <- URLencode(filters_json)
 
 # POST-Anfrage senden
-response <- POST(url, body = filters, encode = "json")
-print(content(response))
+response <- GET(url, query= list(query = filgers_url_encoded))
+
+# Debugging
+print(response)
+print(content(response, as = "text", encoding = "UTF-8"))
+print(headers(response))
+print(status_code(response))
 
 # HTTP-Statuscode der Antwort abrufen
-status_code <- http_status(response)$status_code
+status_code <- status_code(response)
+
+#Antwortinhalt anzeigen
+content_text <- content(response, as = "text", encoding = "UTF-8")
+cat(content_text)
 
 # Status der Anfrage überprüfen
 if (status_code == 200) {
   # Daten erfolgreich abgerufen
-  data <- content(response, as = "text")
-  cat(data)
+  data <- fromJSON(content_text, flatten = TRUE)
+  print(data)
 } else {
   # Fehlermeldung ausgeben
   stop(paste("Fehler beim Abrufen der Daten. HTTP-Statuscode:", status_code))
 }
 
-library(httr)
-
-# API-URL für die Lebenserwartung
-url <- "https://www.pxweb.bfs.admin.ch/api/v1/en/px-x-0102030000_101/px-x-0102030000_101.px"
-
-# Filter für Geschlecht, Alter und Jahr
-filters <- list(
-  query = list(
-    list(
-      code = "Geschlecht",
-      selection = list(
-        filter = "item",
-        values = c("0") # Total (Geschlecht)
-      )
-    ),
-    list(
-      code = "Alter",
-      selection = list(
-        filter = "item",
-        values = c("0") # Total (Alter)
-      )
-    ),
-    list(
-      code = "Jahr",
-      selection = list(
-        filter = "item",
-        values = c("2020") # Jahr 2020
-      )
-    )
-  ),
-  response = list(
-    format = "json-stat"
-  )
-)
