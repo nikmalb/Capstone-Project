@@ -63,7 +63,6 @@ places_df <- do.call(rbind, lapply(places, function(x) {
   }
 })) 
 
-print(x$geometry)
 print(places[1:5])
 # Check whether places_df is NULL before applying distinct
 if (!is.null(places_df)) {

@@ -25,7 +25,7 @@ filters <- list(
       code = "Year",
       selection = list(
         filter = "item",
-        values = c("2020") # Year 2020
+        values = c("0") # Year 2020
       )
     )
   ),
@@ -67,4 +67,26 @@ if (status_code == 200) {
   # Fehlermeldung ausgeben
   stop(paste("Fehler beim Abrufen der Daten. HTTP-Statuscode:", status_code))
 }
+
+# JSON-Daten laden
+data <- fromJSON(content_text, flatten = TRUE)
+
+# Extrahiere die relevanten Daten
+variables <- data$variables
+
+# Erstelle ein leeres DataFrame
+df <- data.frame(matrix(nrow = max(sapply(variables$values, length)), ncol = length(variables$values)))
+
+# Setze die Spaltennamen
+colnames(df) <- names(variables$values)
+
+# Fülle das DataFrame mit Daten
+for (i in seq_along(variables$values)) {
+  df[, i] <- unlist(variables$values[[i]])
+}
+
+# Speichere das DataFrame als CSV-Datei
+write.csv(df, "BFS_API.csv", row.names = FALSE)
+
+
 
