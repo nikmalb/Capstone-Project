@@ -69,9 +69,8 @@ get_weather_forecast <- function(city, api_key) {
   response <- GET(base_url, query = list(q = city, appid = api_key, units = "metric"))
   
   if (status_code(response) == 200) {
-    forecast_data <- content(response, as = "text")
-    forecast_json <- fromJSON(forecast_data)
-    return(forecast_json)
+    forecast_data <- content(response, as = "parsed")
+    return(forecast_data)
   } else {
     stop("Error: Unable to fetch forecast data")
   }
@@ -80,6 +79,7 @@ get_weather_forecast <- function(city, api_key) {
 # Function to print weather forecast info
 print_forecast_info <- function(forecast_json) {
   cat("Weather forecast for the next 5 days:\n")
+  str(forecast_json)  # Debugging line to inspect forecast_json structure
   for (i in seq_along(forecast_json$list)) {
     forecast <- forecast_json$list[[i]]
     cat("Date:", forecast$dt_txt, "\n")
@@ -90,7 +90,12 @@ print_forecast_info <- function(forecast_json) {
   }
 }
 
+
+
 # Test the forecast function
+city <- "Sydney"
+api_key <- weather_cred$api_key
+
 weather_forecast <- get_weather_forecast(city, api_key)
 print_forecast_info(weather_forecast)
 
