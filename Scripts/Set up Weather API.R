@@ -63,3 +63,34 @@ for (city in cities) {
   print_weather(current_weather)
 }
 
+# Function to get weather forecast
+get_weather_forecast <- function(city, api_key) {
+  base_url <- "http://api.openweathermap.org/data/2.5/forecast"
+  response <- GET(base_url, query = list(q = city, appid = api_key, units = "metric"))
+  
+  if (status_code(response) == 200) {
+    forecast_data <- content(response, as = "text")
+    forecast_json <- fromJSON(forecast_data)
+    return(forecast_json)
+  } else {
+    stop("Error: Unable to fetch forecast data")
+  }
+}
+
+# Function to print weather forecast info
+print_forecast_info <- function(forecast_json) {
+  cat("Weather forecast for the next 5 days:\n")
+  for (i in seq_along(forecast_json$list)) {
+    forecast <- forecast_json$list[[i]]
+    cat("Date:", forecast$dt_txt, "\n")
+    cat("Temperature:", forecast$main$temp, "°C\n")
+    cat("Feels like:", forecast$main$feels_like, "°C\n")
+    cat("Description:", forecast$weather[[1]]$description, "\n")
+    cat("-----------------------------------\n")
+  }
+}
+
+# Test the forecast function
+weather_forecast <- get_weather_forecast(city, api_key)
+print_forecast_info(weather_forecast)
+
