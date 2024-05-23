@@ -55,12 +55,18 @@ print_weather <- function(weather) {
 # Test the function
 print_weather(current_weather)
 
-# Test various cities
+# Test various cities and store weather data in a list
 cities <- c("Zurich", "London", "New York", "Tokyo", "Sydney")
+weather_list <- list()
 for (city in cities) {
   cat("\n---\n")
   current_weather <- get_current_weather(city, api_key)
-  print_weather(current_weather)
+  weather_list[[city]] <- current_weather
+}
+
+for (city in names(weather_list)) {
+  cat("\n---\n")
+  print_weather(weather_list[[city]])
 }
 
 # Function to get weather forecast
@@ -97,5 +103,79 @@ city <- "Sydney"
 api_key <- weather_cred$api_key
 
 weather_forecast <- get_weather_forecast(city, api_key)
-print_forecast_info(weather_forecast)
 
+# Function to print readable forecast information
+print_forecast_summary <- function(forecast_data) {
+  forecast_list <- forecast_data$list
+  
+  # Create an empty data frame to store the summary
+  forecast_summary <- data.frame(
+    DateTime = character(),
+    Temperature = numeric(),
+    FeelsLike = numeric(),
+    WeatherDescription = character(),
+    WindSpeed = numeric(),
+    stringsAsFactors = FALSE
+  )
+  
+  for (forecast in forecast_list) {
+    # Extract relevant details
+    dt_txt <- forecast$dt_txt
+    temp <- forecast$main$temp
+    feels_like <- forecast$main$feels_like
+    weather_description <- forecast$weather[[1]]$description
+    wind_speed <- forecast$wind$speed
+    
+    # Add the details to the summary data frame
+    forecast_summary <- rbind(forecast_summary, data.frame(
+      DateTime = dt_txt,
+      Temperature = temp,
+      FeelsLike = feels_like,
+      WeatherDescription = weather_description,
+      WindSpeed = wind_speed,
+      stringsAsFactors = FALSE
+    ))
+  }
+  
+  # Print the summary
+  print(forecast_summary)
+}
+
+# Use the function to print the weather forecast summary
+print_forecast_summary(weather_forecast)
+
+
+
+# Extract the list of forecasts
+forecasts <- weather_list$list
+
+# Create a function to extract the desired information from each forecast entry
+extract_forecast <- function(forecast) {
+  data.frame(
+    dt = forecast$dt,
+    temp = forecast$main$temp,
+    feels_like = forecast$main$feels_like,
+    temp_min = forecast$main$temp_min,
+    temp_max = forecast$main$temp_max,
+    pressure = forecast$main$pressure,
+    humidity = forecast$main$humidity,
+    weather_main = forecast$weather[[1]]$main,
+    weather_description = forecast$weather[[1]]$description,
+    clouds = forecast$clouds$all,
+    wind_speed = forecast$wind$speed,
+    wind_deg = forecast$wind$deg,
+    wind_gust = forecast$wind$gust,
+    visibility = forecast$visibility,
+    pop = forecast$pop,
+    dt_txt = forecast$dt_txt
+  )
+}
+
+# Apply the function to each forecast and combine the results into a data frame
+forecast_df <- do.call(rbind, lapply(forecasts, extract_forecast))
+
+# Convert the dt column to a readable date format
+forecast_df$dt <- as.POSIXct(forecast_df$dt, origin="1970-01-01", tz="UTC")
+
+# Display the data frame
+print(forecast_df)

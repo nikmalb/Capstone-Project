@@ -32,8 +32,12 @@ compare_weather_across_cities <- function(cities, api_key) {
   df <- data.frame(
     City = sapply(weather_data, function(x) x$name),
     Temperature = sapply(weather_data, function(x) x$main$temp),
+    Feels_Like = sapply(weather_data, function(x) x$main$feels_like),
+    Min_Temperature = sapply(weather_data, function(x) x$main$temp_min),
+    Max_Temperature = sapply(weather_data, function(x) x$main$temp_max),
     Humidity = sapply(weather_data, function(x) x$main$humidity),
     Wind_Speed = sapply(weather_data, function(x) x$wind$speed),
+    Cloudiness = sapply(weather_data, function(x) x$clouds$all),
     stringsAsFactors = FALSE
   )
   
@@ -47,12 +51,13 @@ print(comparison_data)
 
 # Reshape the data for plotting
 df_long <- comparison_data %>%
-  pivot_longer(cols = c("Temperature", "Humidity", "Wind_Speed"), names_to = "Parameter", values_to = "Value")
+  pivot_longer(cols = c("Temperature","Feels_Like", "Min_Temperature", "Max_Temperature", "Humidity", "Wind_Speed", "Cloudiness"),
+               names_to = "Parameter", values_to = "Value")
 
 
 # Sort the data by Humidity
 comparison_data_sorted <- comparison_data %>%
-  arrange(desc(Humidity))
+  arrange(desc(Temperature))
 
 # Reorder City factor levels based on Humidity
 df_long <- df_long %>%
@@ -62,7 +67,28 @@ df_long <- df_long %>%
 ggplot(df_long, aes(x = City, y = Value, fill = Parameter)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(x = "City", y = "Value", title = "Weather Comparison Across Major European Cities") +
-  scale_fill_manual(name = "Parameter", values = c("Temperature" = "blue", "Humidity" = "green", "Wind_Speed" = "red")) +
+  scale_fill_manual(name = "Parameter",
+                    values = c("Temperature" = "blue", "Feels_Like" = "lightblue",
+                               "Min_Temperature" = "skyblue", "Max_Temperature" = "darkblue", 
+                               "Humidity" = "green", "Wind_Speed" = "red", "Cloudiness" = "grey")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+# Additional analysis and insights
+
+summary_stats <- comparison_data %>%
+  summarise(across(where(is.numeric), list(mean = mean, sd = sd), na.rm = TRUE))
+print(summary_stats)
+
+# Visualize summary statistics
+summary_long <- summary_stats %>%
+  pivot_longer(cols = everything(), names_to = c("Parameter", ".value"), names_pattern = "(.*)_(.*)")
+
+ggplot(summary_long, aes(x = Parameter, y = mean, fill = Parameter)) +
+  geom_col(position = "dodge") +
+  geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd), width = 0.2, position = position_dodge(0.9)) +
+  labs(x = "Parameter", y = "Mean Value", title = "Summary Statistics of Weather Parameters Across Major European Cities") +
+  theme_minimal()
+
+# Save the comparison data to a CSV file for further analysis
+write_csv(comparison_data, here("weather_comparison_data.csv"))
