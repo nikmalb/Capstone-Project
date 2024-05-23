@@ -1,0 +1,74 @@
+---
+title: "Report"
+output: html_document
+date: "2024-05-23"
+---
+
+## Introduction
+
+I'm interested in understanding how weather patterns vary across major European cities and their implications for various activities and industries. Weather influences our daily lives in different ways, from outdoor activities to holidays. By analyzing weather data using the OpenWeatherMap API, I aim to gain insights into temperature, humidity, wind speed, and cloud cover trends.
+
+
+## Collecting the Data
+
+To get the necessary data for my analysis, I accessed the OpenWeatherMap API using my account credentials. With the API, I received real-time weather information for the selected cities, including temperature, humidity, wind speed, and cloud cover. The data collection process involved making GET requests to the API and parsing the JSON responses to extract relevant information.
+
+After getting the data, I organized it into a structured format for analysis. However, due to limitations in data availability, I focused on a select number of major European cities for this analysis. Despite these constraints, the collected data provides valuable insights into current weather conditions across different locations, which can inform various decision-making processes and applications.
+
+
+## Analysis 
+
+### Weather Comparison Across Major European Cities
+
+We also conducted a comparative analysis of weather data across major European cities. Here are the key findings:
+
+#### Descriptive Statistics
+
+- **Temperature Insights**:
+  - The average temperature across the cities is approximately 18.39°C with a standard deviation of about 5.27°C.
+  - The highest recorded average temperature is in Rome at 29.30°C, while the lowest is in Bern at 12.13°C.
+  - The minimum temperatures range from 10.94°C in Bern to 28.23°C in Rome.
+  - The maximum temperatures range from 13.50°C in Bern to 30.98°C in Rome.
+
+- **Feels Like Temperature**:
+  - The average "Feels Like" temperature is 18.23°C, with Rome experiencing the highest "Feels Like" temperature at 31.72°C.
+  - The standard deviation for "Feels Like" temperature is 6.13°C.
+
+- **Humidity**:
+  - The average humidity across the cities is 65.5%, with a standard deviation of 17.58%.
+  - Bern has the highest humidity at 86%, whereas Madrid has the lowest at 27%.
+
+- **Wind Speed**:
+  - The average wind speed is 1.90 m/s with a standard deviation of 0.72 m/s.
+  - Wind speeds are relatively low across all cities, with the highest in Rome at 3.09 m/s and the lowest in Bern at 0.51 m/s.
+
+- **Cloudiness**:
+  - The average cloudiness is 31.75%, with a high standard deviation of 42.71%, indicating significant variation in cloud cover among the cities.
+  - Bern experiences the highest cloudiness at 100%, whereas several cities (Paris, Berlin, Madrid, Stockholm) report 0% cloudiness.
+
+### Visual Insights from the Plot
+
+1. **Temperature and Humidity**:
+   - Rome stands out with significantly higher temperatures and "Feels Like" temperatures compared to other cities.
+   - Bern and Vienna show higher humidity levels, while Madrid has notably lower humidity.
+
+2. **Wind Speed and Cloudiness**:
+   - Rome has higher wind speeds and moderate cloudiness.
+   - Bern has the lowest wind speed but the highest cloudiness, indicating potential overcast conditions.
+
+![](images/Weather_Comparison_Plot.png)
+
+### Further Analysis Possibilities
+
+There are several potential avenues for further analysis that could provide deeper insights into weather patterns and trends:
+
+- **Time Series Analysis**: Analyzing historical weather data to identify trends, seasonal variations, and long-term changes in weather patterns across these cities.
+- **Correlation Analysis**: Assessing correlations between different weather parameters (e.g., temperature and humidity, wind speed and cloudiness) to understand their relationships.
+- **Geospatial Analysis**: Using geographic maps to visualize weather data spatially, allowing for the examination of regional differences and patterns in weather conditions.
+- **Predictive Modeling**: Developing models to forecast weather conditions based on historical data and current trends, which could be useful for planning and decision-making.
+- **Impact Analysis**: Studying the impact of weather conditions on various aspects such as public health, transportation, and economic activities in different cities.
+
+## Conclusion
+
+In the weather analysis, Rome is significantly warmer than other cities, especially compared to Bern, which is the coldest. Bern and Vienna are more humid, while Madrid is relatively dry. Wind speeds are generally low across all cities, with Rome having the highest. Bern experiences the most cloud cover, indicating overcast conditions, while several cities have clear skies. This comprehensive weather comparison can aid in travel planning and understanding regional climate differences across major European cities.
+```
