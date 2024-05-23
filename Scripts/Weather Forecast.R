@@ -57,6 +57,17 @@ display_num_periods <- function(forecast_data, city) {
   cat("Number of forecast periods for", city, ":", num_periods, "\n")
 }
 
+# Function to calculate summary statistics for forecasted temperatures
+calculate_summary_stats <- function(forecast_data_list, cities) {
+  summary_stats <- list()
+  for (i in seq_along(forecast_data_list)) {
+    temperature <- sapply(forecast_data_list[[i]]$list, function(x) x$main$temp)
+    summary_stats[[i]] <- summary(temperature)
+  }
+  names(summary_stats) <- cities
+  return(summary_stats)
+}
+
 # Test the function for major cities
 major_cities <- c("London", "Paris", "Berlin", "Madrid", "Rome", "Vienna", "Bern", "Stockholm")
 forecast_data_list <- list()
@@ -65,5 +76,10 @@ for (city in major_cities) {
   display_num_periods(forecast_data, city)
   forecast_data_list[[length(forecast_data_list) + 1]] <- forecast_data
 }
+
+# Visualize the weather forecast for multiple cities
 print(visualize_weather_forecast_multi(forecast_data_list, major_cities))
 
+# Calculate summary statistics for forecasted temperatures
+summary_stats <- calculate_summary_stats(forecast_data_list, major_cities)
+print(summary_stats)
