@@ -35,7 +35,7 @@ visualize_weather_forecast <- function(forecast_data, city) {
 }
 
 # Function to visualize weather forecast for multiple cities
-visualize_weather_forecast_multi <- function(forecast_data_list, cities) {
+weather_forecast <- visualize_weather_forecast_multi <- function(forecast_data_list, cities) {
   # combine all forecast data into one dataframe
   df <- data.frame()
   for (i in seq_along(forecast_data_list)) {
@@ -78,8 +78,11 @@ for (city in major_cities) {
 }
 
 # Visualize the weather forecast for multiple cities
-print(visualize_weather_forecast_multi(forecast_data_list, major_cities))
+weather_forecast <- visualize_weather_forecast_multi(forecast_data_list, major_cities)
 
 # Calculate summary statistics for forecasted temperatures
 summary_stats <- calculate_summary_stats(forecast_data_list, major_cities)
 print(summary_stats)
+
+# Save the plot
+ggsave("Plots/weather_forecast.png", plot = weather_forecast, width = 8, height = 6, dpi = 300)

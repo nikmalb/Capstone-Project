@@ -92,7 +92,7 @@ summary_plot <- ggplot(summary_long, aes(x = Parameter, y = mean, fill = Paramet
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # Save the comparison data to a CSV file for further analysis
-write_csv(comparison_data, here("weather_comparison_data.csv"))
+write_csv(comparison_data, here("Data/weather_comparison_data.csv"))
 
 # Save the plots
 ggsave("Plots/comparison_plot.png", comparison_plot, width = 8, height = 6, dpi = 300)
