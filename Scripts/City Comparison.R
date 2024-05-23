@@ -64,7 +64,7 @@ df_long <- df_long %>%
   mutate(City = factor(City, levels = comparison_data_sorted$City))
 
 # Visualize the comparison
-ggplot(df_long, aes(x = City, y = Value, fill = Parameter)) +
+comparison_plot <- ggplot(df_long, aes(x = City, y = Value, fill = Parameter)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(x = "City", y = "Value", title = "Weather Comparison Across Major European Cities") +
   scale_fill_manual(name = "Parameter",
@@ -84,11 +84,16 @@ print(summary_stats)
 summary_long <- summary_stats %>%
   pivot_longer(cols = everything(), names_to = c("Parameter", ".value"), names_pattern = "(.*)_(.*)")
 
-ggplot(summary_long, aes(x = Parameter, y = mean, fill = Parameter)) +
+summary_plot <- ggplot(summary_long, aes(x = Parameter, y = mean, fill = Parameter)) +
   geom_col(position = "dodge") +
   geom_errorbar(aes(ymin = mean - sd, ymax = mean + sd), width = 0.2, position = position_dodge(0.9)) +
   labs(x = "Parameter", y = "Mean Value", title = "Summary Statistics of Weather Parameters Across Major European Cities") +
-  theme_minimal()
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # Save the comparison data to a CSV file for further analysis
 write_csv(comparison_data, here("weather_comparison_data.csv"))
+
+# Save the plots
+ggsave("Plots/comparison_plot.png", comparison_plot, width = 8, height = 6, dpi = 300)
+ggsave("Plots/summary_plot.png", summary_plot, width = 8, height = 6, dpi = 300)
