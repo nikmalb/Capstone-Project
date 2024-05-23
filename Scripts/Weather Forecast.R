@@ -34,6 +34,23 @@ visualize_weather_forecast <- function(forecast_data, city) {
     theme_minimal()
 }
 
+# Function to visualize weather forecast for multiple cities
+visualize_weather_forecast_multi <- function(forecast_data_list, cities) {
+  # combine all forecast data into one dataframe
+  df <- data.frame()
+  for (i in seq_along(forecast_data_list)) {
+    temperature <- sapply(forecast_data_list[[i]]$list, function(x) x$main$temp)
+    date_time <- as.POSIXct(sapply(forecast_data_list[[i]]$list, function(x) x$dt_txt), tz = "UTC")
+    df <- rbind( df, data.frame(DateTime = date_time, Temperature = temperature, City = cities[i]))
+  }
+  
+  # Plot the combined forecast data
+  ggplot(df, aes(x = DateTime, y = Temperature, color = City)) +
+    geom_line() +
+    labs(x = "Date Time", y = "Temperature (°C)", title = "Weather Forecast") +
+    theme_minimal()
+}
+
 # Function to display the number of forecast periods
 display_num_periods <- function(forecast_data, city) {
   num_periods <- length(forecast_data$list)
@@ -42,9 +59,11 @@ display_num_periods <- function(forecast_data, city) {
 
 # Test the function for major cities
 major_cities <- c("London", "Paris", "Berlin", "Madrid", "Rome", "Vienna", "Bern", "Stockholm")
+forecast_data_list <- list()
 for (city in major_cities) {
   forecast_data <- get_weather_forecast(city, api_key)
   display_num_periods(forecast_data, city)
-  print(visualize_weather_forecast(forecast_data, city))
+  forecast_data_list[[length(forecast_data_list) + 1]] <- forecast_data
 }
+print(visualize_weather_forecast_multi(forecast_data_list, major_cities))
 
