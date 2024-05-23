@@ -58,9 +58,7 @@ We conducted a comparative analysis of both forecasted and acutal weather data a
    - Rome has higher wind speeds and moderate cloudiness.
    - Bern has the lowest wind speed but the highest cloudiness, indicating potential overcast conditions.
 
-![](images/Weather_Comparison_Plot.png)
-
-##Conclusion
+## Conclusion
 
 Through this analysis, I gained valuable insights into weather patterns across major European cities. Rome seems to be significantly warmer than other cities, contrasting with Bern, which experiences cooler temperatures. Moreover, Bern and Vienna show higher humidity levels, while Madrid is relatively dry. Despite generally low wind speeds across all cities, Rome stands out with the highest wind speed. Additionally, Bern has the most cloud cover, suggesting overcast conditions, while several cities enjoy clear skies.
 
