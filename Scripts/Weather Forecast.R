@@ -2,6 +2,7 @@
 library(httr)
 library(jsonlite)
 library(ggplot2)
+library(here)
 
 # Load credentials
 weather_cred <- read_csv(file = here("weather_credentials.csv"))
@@ -21,7 +22,7 @@ get_weather_forecast <- function(city, api_key) {
 }
 
 # Function to visualize weather forecast
-visualize_weather_forecast <- function(forecast_data) {
+visualize_weather_forecast <- function(forecast_data, city) {
   temperature <- sapply(forecast_data$list, function(x) x$main$temp)
   date_time <- as.POSIXct(sapply(forecast_data$list, function(x) x$dt_txt), tz = "UTC")
   
@@ -29,16 +30,21 @@ visualize_weather_forecast <- function(forecast_data) {
   
   ggplot(df, aes(x = DateTime, y = Temperature)) +
     geom_line() +
-    labs(x = "Date Time", y = "Temperature (°C)", title = "Weather Forecast") +
+    labs(x = "Date Time", y = "Temperature (°C)", title = paste("Weather Forecast for", city)) +
     theme_minimal()
 }
 
-# Test the function
-city <- "Tokyo"
-api_key <- weather_cred$api_key
-forecast_data <- get_weather_forecast(city, api_key)
+# Function to display the number of forecast periods
+display_num_periods <- function(forecast_data, city) {
+  num_periods <- length(forecast_data$list)
+  cat("Number of forecast periods for", city, ":", num_periods, "\n")
+}
 
-# Display the number of forecast periods
-num_periods <- length(forecast_data$list)
-cat("Number of forecast periods:", num_periods, "\n")
-visualize_weather_forecast(forecast_data)
+# Test the function for major cities
+major_cities <- c("London", "Paris", "Berlin", "Madrid", "Rome", "Vienna", "Bern", "Stockholm")
+for (city in major_cities) {
+  forecast_data <- get_weather_forecast(city, api_key)
+  display_num_periods(forecast_data, city)
+  print(visualize_weather_forecast(forecast_data, city))
+}
+
