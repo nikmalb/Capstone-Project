@@ -11,28 +11,30 @@ I'm interested in understanding how weather patterns vary across major European 
 
 ## Collecting the Data
 
-To get the necessary data for my analysis, I accessed the OpenWeatherMap API using my account credentials. With the API, I received real-time weather information for the selected cities, including temperature, humidity, wind speed, and cloud cover. The data collection process involved making GET requests to the API and parsing the JSON responses to extract relevant information.
+To get the necessary data for my analysis, I accessed the OpenWeatherMap API using my account credentials. With the API, I received real-time weather information for the selected cities, including temperature, humidity, wind speed, and cloud cover. Further I also got the forecast data for the next 5 days. The data collection process involved making GET requests to the API and parsing the JSON responses to extract relevant information.
 
-After getting the data, I organized it into a structured format for analysis. However, due to limitations in data availability, I focused on a select number of major European cities for this analysis. Despite these constraints, the collected data provides valuable insights into current weather conditions across different locations, which can inform various decision-making processes and applications.
+After getting the data, I organized it into a structured format for analysis. The collected data provides valuable insights into current weather conditions across different locations, and the forecasted data for these locations, which can inform various decision-making processes and applications.
 
 
 ## Analysis 
 
 ### Weather Comparison Across Major European Cities
 
-We also conducted a comparative analysis of weather data across major European cities. Here are the key findings:
+We conducted a comparative analysis of both forecasted and acutal weather data across major European cities. Here are the key findings:
 
 #### Descriptive Statistics
 
-- **Temperature Insights**:
-  - The average temperature across the cities is approximately 18.39°C with a standard deviation of about 5.27°C.
-  - The highest recorded average temperature is in Rome at 29.30°C, while the lowest is in Bern at 12.13°C.
-  - The minimum temperatures range from 10.94°C in Bern to 28.23°C in Rome.
-  - The maximum temperatures range from 13.50°C in Bern to 30.98°C in Rome.
+- **Forecasted Temperature Insights**:
+  - The average forecasted temperature across the cities is approximately 18.39°C with a standard deviation of about 5.27°C.
+  - The highest recorded average forecasted temperature is in Rome at 29.30°C, while the lowest is in Bern at 12.13°C.
+  - The minimum forecasted temperatures range from 10.94°C in Bern to 28.23°C in Rome.
+  - The maximum forecasted temperatures range from 13.50°C in Bern to 30.98°C in Rome.
 
-- **Feels Like Temperature**:
-  - The average "Feels Like" temperature is 18.23°C, with Rome experiencing the highest "Feels Like" temperature at 31.72°C.
-  - The standard deviation for "Feels Like" temperature is 6.13°C.
+- **Actual Temperature Insights**:
+  - Based on the actual data from today, the average temperature across the cities is approximately 17.80°C with a standard deviation of about 5.56°C.
+  - The highest recorded average temperature is in Rome at 29.22°C, while the lowest is in Bern at 11.75°C.
+  - The minimum actual temperatures range from 10.59°C in Bern to 27.87°C in Rome.
+  - The maximum actual temperatures range from 13.12°C in Bern to 30.66°C in Rome.
 
 - **Humidity**:
   - The average humidity across the cities is 65.5%, with a standard deviation of 17.58%.
